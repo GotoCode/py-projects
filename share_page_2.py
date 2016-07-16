@@ -8,6 +8,9 @@ author: GotoCode
 
 import smtplib
 
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+
 
 # user credentials
 username = '???'
@@ -17,8 +20,17 @@ from_addr = '???'
 to_addr   = '???'
 
 
+# email headers
+headers = MIMEMultipart()
+
+headers['From']    = from_addr
+headers['To']      = to_addr
+headers['Subject'] = 'SUBJECT'
+
+
 # message to send
 msg = 'YOUR MESSAGE HERE!'
+headers.attach(MIMEText(msg))
 
 
 # connect to SMTP server
@@ -31,7 +43,7 @@ server.starttls()
 server.login(username, pwd)
 
 # send simple plain-text email
-server.sendmail(from_addr, to_addr, msg)
+server.sendmail(from_addr, to_addr, headers.as_string())
 
 # terminate SMTP session
 server.quit()
